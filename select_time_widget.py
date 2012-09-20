@@ -33,10 +33,18 @@ class SelectTimeWidget(Widget):
     twelve_hr = False # Default to 24hr.
     use_seconds = True
     
-    def __init__(self, attrs=None, hour_step=1, minute_step=1, second_step=1, twelve_hr=False, use_seconds=True):
+    def __init__(self, attrs=None, 
+                 hour_step=1, minute_step=1, second_step=1, 
+                 min_hour=0, max_hour=23,
+                 twelve_hr=False, use_seconds=True):
         """
         hour_step, minute_step, second_step are optional step values for
         for the range of values for the associated select element
+
+        min_hour and max_hour are the minimum and maximum values that will be
+        allowed in the hour field. Currently these should only be used with a 24-hr
+        clock, and will be ignored if twelve_hr is True.
+
         twelve_hr: If True, forces the output to be in 12-hr format (rather than 24-hr)
         use_seconds: If False, doesn't show seconds select element and stores seconds = 0.
         """
@@ -47,13 +55,12 @@ class SelectTimeWidget(Widget):
             self.meridiem_val = 'a.m.' # Default to Morning (A.M.)
         
         if twelve_hr:
-            self.hours = range(1,13,hour_step) 
+            self.hours = range(1, 13, hour_step) 
         else: # 24hr, with stepping.
-            self.hours = range(0,24,hour_step)
+            self.hours = range(min_hour, max_hour + 1, hour_step)
 
-        self.minutes = range(0,60,minute_step)
-
-        self.seconds = range(0,60,second_step)
+        self.minutes = range(0, 60, minute_step)
+        self.seconds = range(0, 60, second_step)
         
         self.use_seconds = use_seconds
 
