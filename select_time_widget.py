@@ -49,20 +49,19 @@ class SelectTimeWidget(Widget):
         use_seconds: If False, doesn't show seconds select element and stores seconds = 0.
         """
         self.attrs = attrs or {}
+        self.use_seconds = use_seconds
+        self.twelve_hr = twelve_hr
         
         if twelve_hr:
-            self.twelve_hr = True # Do 12hr (rather than 24hr)
             self.meridiem_val = 'a.m.' # Default to Morning (A.M.)
-        
-        if twelve_hr:
             self.hours = range(1, 13, hour_step) 
         else: # 24hr, with stepping.
             self.hours = range(min_hour, max_hour + 1, hour_step)
 
         self.minutes = range(0, 60, minute_step)
-        self.seconds = range(0, 60, second_step)
-        
-        self.use_seconds = use_seconds
+
+        if use_seconds:
+            self.seconds = range(0, 60, second_step)
 
     def render(self, name, value, attrs=None):
         try: # try to get time values from a datetime.time object (value)
@@ -137,7 +136,7 @@ class SelectTimeWidget(Widget):
         if self.twelve_hr:
             #  If we were given an initial value, make sure the correct meridiem gets selected.
             if self.meridiem_val is not None and  self.meridiem_val.startswith('p'):
-                    meridiem_choices = [('p.m.','p.m.'), ('a.m.','a.m.')]
+                meridiem_choices = [('p.m.','p.m.'), ('a.m.','a.m.')]
             else:
                 meridiem_choices = [('a.m.','a.m.'), ('p.m.','p.m.')]
 
