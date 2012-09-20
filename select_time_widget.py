@@ -33,7 +33,7 @@ class SelectTimeWidget(Widget):
     twelve_hr = False # Default to 24hr.
     use_seconds = True
     
-    def __init__(self, attrs=None, hour_step=None, minute_step=None, second_step=None, twelve_hr=False, use_seconds=True):
+    def __init__(self, attrs=None, hour_step=1, minute_step=1, second_step=1, twelve_hr=False, use_seconds=True):
         """
         hour_step, minute_step, second_step are optional step values for
         for the range of values for the associated select element
@@ -46,24 +46,14 @@ class SelectTimeWidget(Widget):
             self.twelve_hr = True # Do 12hr (rather than 24hr)
             self.meridiem_val = 'a.m.' # Default to Morning (A.M.)
         
-        if hour_step and twelve_hr:
+        if twelve_hr:
             self.hours = range(1,13,hour_step) 
-        elif hour_step: # 24hr, with stepping.
+        else: # 24hr, with stepping.
             self.hours = range(0,24,hour_step)
-        elif twelve_hr: # 12hr, no stepping
-            self.hours = range(1,13)
-        else: # 24hr, no stepping
-            self.hours = range(0,24) 
 
-        if minute_step:
-            self.minutes = range(0,60,minute_step)
-        else:
-            self.minutes = range(0,60)
+        self.minutes = range(0,60,minute_step)
 
-        if second_step:
-            self.seconds = range(0,60,second_step)
-        else:
-            self.seconds = range(0,60)
+        self.seconds = range(0,60,second_step)
         
         self.use_seconds = use_seconds
 
